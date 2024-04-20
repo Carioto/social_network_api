@@ -1,13 +1,5 @@
 const mongoose = require("mongoose");
 
-const thoughtSchema = new mongoose.Schema({
-  thoughtContent: { type: String, required: true },
-});
-
-const friendSchema = new mongoose.Schema({
-  friendName: userSchema.username,
-});
-
 const userSchema = new mongoose.Schema(
   {
     username: {
