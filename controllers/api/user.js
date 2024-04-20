@@ -1,13 +1,14 @@
 const router = require("express").Router();
-const { User } = require("../../models");
+const User  = require("../../models/User");
 
-// routes for /api/users
+// routes for /api/user
 
 router.get("/", async (req, res) => {
   try {
-    const userdata = await User.find({});
-    const users = userdata.map((user) => user.get({ plain: true }));
-    return res.json(users);
+    const userdata = await User.find();
+    // const users = userdata.map((data) => data.get());
+    console.log(userdata);
+    res.json(users);
   } catch (err) {
     return res.status(500).json(err);
   }
@@ -19,7 +20,8 @@ router.get("/:id", async (req, res) => {
     if (!userdata) {
       return res.status(404).json({ message: "No user with that ID exists" });
     }
-    return res.json(user);
+    console.log(userdata)
+    return res.json(userdata);
   } catch (err) {
     return res.status(500).json(err);
   }
@@ -61,7 +63,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-router.post("/:id/friends/:friendId", async (req, res) => {
+router.put("/:id/friends/:friendId", async (req, res) => {
   try {
     const addFriend = await User.findByIdAndUpdate(
       { _id: req.params.id },
@@ -70,6 +72,7 @@ router.post("/:id/friends/:friendId", async (req, res) => {
     if (!addFriend) {
       return res.status(404).json({ message: "No user with that ID exists" });
     }
+    console.log(addFriend);
     return res.status(200).json({ message: "friend added to user" });
   } catch (err) {
     return res.status(500).json(err);
@@ -80,8 +83,9 @@ router.delete("/:id/friends/:friendId", async (req, res) => {
   try {
     const deleteFriend = await User.findByIdAndUpdate(
       { _id: req.params.id },
-      { $pull: { friends: { _id: req.params.friendId } } },
+      { $pull: { friends: req.params.friendId  } },
     );
+    console.log(deleteFriend);
     if (!deleteFriend) {
       return res.status(404).json({ message: "No user with that ID exists" });
     }
@@ -90,3 +94,4 @@ router.delete("/:id/friends/:friendId", async (req, res) => {
     return res.status(500).json(err);
   }
 });
+module.exports = router;
