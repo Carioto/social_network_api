@@ -3,17 +3,19 @@ const User  = require("../../models/User");
 
 // routes for /api/user
 
+// show all users
 router.get("/", async (req, res) => {
   try {
-    const userdata = await User.find();
+    const userdata = await User.find({}, 'username');
     // const users = userdata.map((data) => data.get());
     console.log(userdata);
-    res.json(users);
+    return res.status(200).json(userdata);
   } catch (err) {
     return res.status(500).json(err);
   }
 });
 
+//show one user
 router.get("/:id", async (req, res) => {
   try {
     const userdata = await User.findById({ _id: req.params.id });
@@ -21,24 +23,26 @@ router.get("/:id", async (req, res) => {
       return res.status(404).json({ message: "No user with that ID exists" });
     }
     console.log(userdata)
-    return res.json(userdata);
+    return res.status(200).json(userdata);
   } catch (err) {
     return res.status(500).json(err);
   }
 });
 
+//add user
 router.post("/", async (req, res) => {
   try {
     const userdata = await User.create({
       username: req.body.username,
       email: req.body.email,
     });
-    return res.json(userdata);
+    return res.status(200).json(userdata);
   } catch (err) {
     return res.status(500).json(err);
   }
 });
 
+//update user
 router.put("/:id", async (req, res) => {
   try {
     const userdata = await User.findByIdAndUpdate(
@@ -51,6 +55,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+// delete user
 router.delete("/:id", async (req, res) => {
   try {
     const userdata = await User.findByIdAndDelete({ _id: req.params.id });
@@ -63,6 +68,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+// add friend
 router.put("/:id/friends/:friendId", async (req, res) => {
   try {
     const addFriend = await User.findByIdAndUpdate(
@@ -79,6 +85,7 @@ router.put("/:id/friends/:friendId", async (req, res) => {
   }
 });
 
+//delete friend
 router.delete("/:id/friends/:friendId", async (req, res) => {
   try {
     const deleteFriend = await User.findByIdAndUpdate(
@@ -94,4 +101,5 @@ router.delete("/:id/friends/:friendId", async (req, res) => {
     return res.status(500).json(err);
   }
 });
+
 module.exports = router;
