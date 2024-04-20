@@ -1,12 +1,12 @@
 const router = require("express").Router();
-const User  = require("../../models/User");
+const User = require("../../models/User");
 
 // routes for /api/user
 
 // show all users
 router.get("/", async (req, res) => {
   try {
-    const userdata = await User.find({}, 'username');
+    const userdata = await User.find({}, "username");
     // const users = userdata.map((data) => data.get());
     console.log(userdata);
     return res.status(200).json(userdata);
@@ -22,7 +22,7 @@ router.get("/:id", async (req, res) => {
     if (!userdata) {
       return res.status(404).json({ message: "No user with that ID exists" });
     }
-    console.log(userdata)
+    console.log(userdata);
     return res.status(200).json(userdata);
   } catch (err) {
     return res.status(500).json(err);
@@ -90,7 +90,7 @@ router.delete("/:id/friends/:friendId", async (req, res) => {
   try {
     const deleteFriend = await User.findByIdAndUpdate(
       { _id: req.params.id },
-      { $pull: { friends: req.params.friendId  } },
+      { $pull: { friends: req.params.friendId } },
     );
     console.log(deleteFriend);
     if (!deleteFriend) {

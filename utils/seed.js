@@ -29,7 +29,7 @@ connection.once("open", async () => {
   ];
 
   await User.collection.insertMany(users);
-  console.table(users)
+  console.table(users);
   console.log("seeding complete");
   process.exit(0);
 });
