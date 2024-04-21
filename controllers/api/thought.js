@@ -7,9 +7,9 @@ const Thought = require("../../models/Thought");
 // show all thoughts
 router.get("/", async (req, res) => {
   try {
-    const thoughtdata = await Thought.find();
+    const thoughtdata = await Thought.find({}, "thoughtText");
     console.log(thoughtdata);
-    return res.json(thoughtdata);
+    return res.status(200).json(thoughtdata);
   } catch (err) {
     return res.status(500).json(err);
   }
@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const thoughtdata = await Thought.findById({ _id: req.params.id });
-    return res.json(thoughtdata);
+    return res.status(200).json(thoughtdata);
   } catch (err) {
     return res.status(500).json(err);
   }
@@ -55,7 +55,7 @@ router.put("/:id", async (req, res) => {
     );
     return res.status(200).json(thoughtdata);
   } catch (err) {
-    return res.status(200).json(err);
+    return res.status(500).json(err);
   }
 });
 
@@ -69,4 +69,29 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+router.post('/:id/reactions', async (req,res) => {
+  try{
+    const reactiondata = await Thought.findByIdAndUpdate(
+      {_id:req.params.id},
+      {$addToSet:{reactions:req.body}},
+    );
+    console.log(`\x1b[35m` + reactiondata)
+  
+  return res.status(200).json(reactiondata);
+} catch (err){
+  return res.status(500).json(err);
+}
+});
+
+router.delete("/:id/reactions/:reactionId", async (req, res) => {
+  try {
+    const reactiondata = await Thought.findByIdAndUpdate(
+      { _id: req.params.id },
+      {$pull: {reactions: {reactionId: req.params.reactionId}}}
+    );
+    return res.status(200).json(reactiondata);
+  } catch (err) {
+    return res.status(200).json(err);
+  }
+});
 module.exports = router;

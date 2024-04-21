@@ -14,18 +14,6 @@ connection.once("open", async () => {
       username: "darkskies",
       email: "darkskies@clearskies.com",
     },
-    {
-      username: "oversite",
-      email: "oversight@commune.com",
-    },
-    {
-      username: "mashedpeas",
-      email: "hatepeas@eatyourveggies.com",
-    },
-    {
-      username: "solvedrubic",
-      email: "brightguy@harvard.edu",
-    },
   ];
 
   await User.collection.insertMany(users);
