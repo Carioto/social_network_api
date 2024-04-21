@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-const  reactionSchema  = require("./Reaction");
+const reactionSchema = require("./Reaction");
 
 const thoughtSchema = new Schema(
   {
@@ -27,7 +27,12 @@ const thoughtSchema = new Schema(
   },
 );
 
-// thoughtSchema.virtual(reactionCount);
+thoughtSchema.virtual("reactionCount").get(function () {
+  return this.reactions.length;
+});
+thoughtSchema.virtual("formatDate").get(function(){
+    return this.createdAt.toString()
+  });
 
 const Thought = model("thought", thoughtSchema);
 
