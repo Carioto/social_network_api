@@ -7,7 +7,8 @@ const Thought = require("../../models/Thought");
 // show all thoughts
 router.get("/", async (req, res) => {
   try {
-    const thoughtdata = await Thought.find({}, "thoughtText");
+    const thoughtdata = await Thought.find({});
+
     console.log(thoughtdata);
     return res.status(200).json(thoughtdata);
   } catch (err) {
@@ -40,7 +41,7 @@ router.post("/:id", async (req, res) => {
       { _id: req.params.id },
       { $addToSet: { thoughts: thoughtdata._id } },
     );
-    return res.status(200).json({message:"Thought added"});
+    return res.status(200).json({ message: "Thought added" });
   } catch (err) {
     return res.status(500).json(err);
   }
@@ -53,7 +54,7 @@ router.put("/:id", async (req, res) => {
       { _id: req.params.id },
       { $set: { thoughtText: req.body.text } },
     );
-    return res.status(200).json({message:"Thought updated"});
+    return res.status(200).json({ message: "Thought updated" });
   } catch (err) {
     return res.status(500).json(err);
   }
@@ -63,7 +64,7 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const thoughtdata = await Thought.findByIdAndDelete({ _id: req.params.id });
-    return res.status(200).json({message:"Thought deleted"});
+    return res.status(200).json({ message: "Thought deleted" });
   } catch (err) {
     return res.status(200).json(err);
   }
@@ -77,7 +78,7 @@ router.post("/:id/reactions", async (req, res) => {
     );
     console.log(`\x1b[35m` + reactiondata);
 
-    return res.status(200).json({message:"Reaction added"});
+    return res.status(200).json({ message: "Reaction added" });
   } catch (err) {
     return res.status(500).json(err);
   }
@@ -89,7 +90,7 @@ router.delete("/:id/reactions/:reactionId", async (req, res) => {
       { _id: req.params.id },
       { $pull: { reactions: { reactionId: req.params.reactionId } } },
     );
-    return res.status(200).json({message:"Reaction deleted"});
+    return res.status(200).json({ message: "Reaction deleted" });
   } catch (err) {
     return res.status(200).json(err);
   }

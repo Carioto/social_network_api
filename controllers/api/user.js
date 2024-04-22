@@ -6,9 +6,9 @@ const User = require("../../models/User");
 // show all users
 router.get("/", async (req, res) => {
   try {
-    const userdata = await User.find({}, "username")
+    const userdata = await User.find({});
 
-    console.log(typeof(userdata));
+    console.log(userdata);
     return res.status(200).json(userdata);
   } catch (err) {
     return res.status(500).json(err);
@@ -19,9 +19,9 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const userdata = await User.findOne({ _id: req.params.id })
-    .select('-__v')
-        .populate('thoughts')
-        .populate('friends');
+      .select("-__v")
+      .populate("thoughts")
+      .populate("friends");
     if (!userdata) {
       return res.status(404).json({ message: "No user with that ID exists" });
     }
@@ -40,7 +40,7 @@ router.post("/", async (req, res) => {
       email: req.body.email,
     });
     console.log(userdata);
-    return res.status(200).json({message:"User added"});
+    return res.status(200).json({ message: "User added" });
   } catch (err) {
     return res.status(500).json(err);
   }
@@ -54,7 +54,7 @@ router.put("/:id", async (req, res) => {
       { $set: req.body },
     );
     console.log(userdata);
-    return res.json({message:"User updated"});
+    return res.json({ message: "User updated" });
   } catch (err) {
     return res.status(500).json(err);
   }
@@ -74,7 +74,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 // add friend
-router.put("/:id/friends/:friendId", async (req, res) => {
+router.post("/:id/friends/:friendId", async (req, res) => {
   try {
     const addFriend = await User.findByIdAndUpdate(
       { _id: req.params.id },
